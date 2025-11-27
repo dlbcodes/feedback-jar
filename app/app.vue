@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { Analytics } from "@vercel/analytics/nuxt";
+const config = useRuntimeConfig();
+
 useHead({
     script: [
         {
@@ -15,5 +18,8 @@ useHead({
 <template>
     <div>
         <NuxtPage />
+        <ToastProvider />
+        <CookieConsent />
+        <Analytics v-if="config.public.NODE_ENV === 'production'" />
     </div>
 </template>

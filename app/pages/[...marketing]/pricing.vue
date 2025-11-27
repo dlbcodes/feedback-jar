@@ -26,7 +26,7 @@ const plans = {
             "Email alerts",
             "6 months data retention",
             "6 months data retention",
-            "6 months data retention",
+            "12 months data retention",
         ],
     },
     starter: {

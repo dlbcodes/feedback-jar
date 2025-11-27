@@ -14,6 +14,8 @@ import {
     selectorVariants,
 } from "~/variants/ButtonGroupVariants";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
+import { ChevronLeftIcon } from "@heroicons/vue/24/outline";
+import { buttonVariants } from "~/variants/ButtonVariants";
 
 interface Props {
     modelValue: boolean;
@@ -237,6 +239,33 @@ const closeModal = () => {
 
             <!-- Right Panel -->
             <div class="w-1/4 flex flex-col shrink-0 overflow-y-auto gap-y-6">
+                <div class="flex">
+                    <button
+                        :class="
+                            cn(
+                                buttonVariants({
+                                    variant: 'icon',
+                                    size: 'icon',
+                                })
+                            )
+                        "
+                    >
+                        <ChevronLeftIcon class="size-5" />
+                    </button>
+                    <button
+                        :class="
+                            cn(
+                                buttonVariants({
+                                    variant: 'icon',
+                                    size: 'icon',
+                                })
+                            )
+                        "
+                    >
+                        <ChevronLeftIcon class="size-5 rotate-180" />
+                    </button>
+                </div>
+
                 <!-- Reporter Info -->
                 <div>
                     <span class="font-mono text-xs text-stone-600 mb-2 block">
