@@ -11,7 +11,7 @@ const apiEndpoint = isProd
     ? "https://www.datomi.app/api/v1/feedback"
     : "http://localhost:3000/api/v1/feedback";
 
-const scriptKey = "cmig1187a00010zxtic4fe5il";
+const scriptKey = "cmihoylrp0003l104naaczfsw";
 const position = "top-right";
 
 useHead({
