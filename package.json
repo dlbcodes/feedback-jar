@@ -3,7 +3,7 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "build": "prisma generate && prisma migrate deploy && nuxt build",
+       "build": "prisma generate && prisma migrate deploy && npx tsx prisma/seeds/seedTriggers.ts && nuxt build",
         "dev": "nuxt dev",
         "generate": "nuxt generate",
         "preview": "nuxt preview",
