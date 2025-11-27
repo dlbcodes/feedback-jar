@@ -1,11 +1,16 @@
 (function () {
     "use strict";
 
-    // Configuration
+    // Read config from the script tag
+    const currentScript =
+        document.currentScript ||
+        document.querySelector('script[src*="feedbackjar.js"]');
+
     const CONFIG = {
-        apiEndpoint: "http://localhost:3000/api/v1/feedback", // Replace with your API endpoint
-        scriptKey: "cmih915qu00050z84sdjhg3ly", // Replace with your actual script key
-        position: "bottom-right", // Options: bottom-right, bottom-left, top-right, top-left
+        apiEndpoint: currentScript?.getAttribute("data-api-endpoint") || "",
+        scriptKey: currentScript?.getAttribute("data-script-key") || "",
+        position:
+            currentScript?.getAttribute("data-position") || "bottom-right",
     };
 
     // Create styles
