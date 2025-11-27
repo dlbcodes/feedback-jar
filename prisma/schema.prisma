@@ -1,0 +1,147 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Profile {
+  id     String  @id @db.Uuid
+  name   String
+  avatar String?
+
+  // Stripe fields
+  stripeCustomerId       String?   @unique
+  stripeSubscriptionId   String?   @unique
+  stripePriceId          String?
+  stripeCurrentPeriodEnd DateTime?
+  subscriptionTier       String    @default("trial") // "trial", "free", "pro", "enterprise"
+  trialEndsAt            DateTime? // Set to 14 days from signup
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+   projects            Project[]
+  assignedFeedbacks   Feedback[]        @relation("AssignedFeedback")
+  feedbackComments    FeedbackComment[]
+
+  @@map("profiles")
+}
+
+model Project {
+  id            String     @id @default(cuid())
+  name          String
+  timezone      String?
+  domain        String?
+  scriptKey     String     @unique @default(cuid())
+  profileId     String     @db.Uuid
+  profile       Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  feedbacks     Feedback[]
+  feedbackTypes FeedbackType[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  @@index([profileId])
+  @@index([scriptKey])
+}
+
+model FeedbackType {
+  id          String     @id @default(cuid())
+  name        String     // "bug", "feature", "help", or custom
+  label       String     // Display name
+  emoji       String?    // Optional emoji
+  isDefault   Boolean    @default(false)
+  projectId   String
+  project     Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  feedbacks   Feedback[]
+  createdAt   DateTime   @default(now())
+
+  @@unique([projectId, name])
+  @@index([projectId])
+}
+
+model Feedback {
+  id                 String       @id @default(cuid())
+  projectId          String
+  project            Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  // User-provided data
+  message            String       @db.Text
+  email              String
+  typeId             String
+  type               FeedbackType @relation(fields: [typeId], references: [id])
+  
+  // Technical details
+  screenshotUrl      String?
+  pageUrl            String       @db.Text
+  browser            String?
+  browserVersion     String?
+  os                 String?
+  deviceType         String?
+  viewportWidth      Int?
+  viewportHeight     Int?
+  devicePixelRatio   Float?
+  userAgent          String?      @db.Text
+  
+  // Session & user tracking
+  sessionId          String?
+  userId             String?
+  
+  // Metadata
+  metadata           Json?
+  customFields       Json?
+  
+  // Status & assignment
+  status             String       @default("new") // "new", "in_progress", "resolved", "closed"
+  assignedToId String? @db.Uuid
+  assignedTo         Profile?     @relation("AssignedFeedback", fields: [assignedToId], references: [id], onDelete: SetNull)
+  
+  // Comments
+  comments           FeedbackComment[]
+  
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  @@index([projectId])
+  @@index([status])
+  @@index([typeId])
+  @@index([assignedToId])
+  @@index([createdAt])
+}
+
+model FeedbackComment {
+  id         String   @id @default(cuid())
+  feedbackId String
+  feedback   Feedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+ authorId String @db.Uuid
+  author     Profile  @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  content    String   @db.Text
+  isInternal Boolean  @default(true) // Internal notes vs customer-facing
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([feedbackId])
+  @@index([authorId])
+}
+
+
+model Waitlist {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String
+  email     String   @unique
+  status    String   @default("pending") // "pending", "invited", "converted"
+  notified  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@map("waitlist")
+}

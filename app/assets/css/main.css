@@ -1,0 +1,27 @@
+@import "tailwindcss";
+@import "./fonts.css" layer(utilities);
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Define theme variables */
+@theme {
+    --font-sans: "Geist", system-ui, sans-serif;
+    --font-mono: "Geist Mono", ui-monospace, monospace;
+
+    /* Custom color */
+    --color-dark-50: oklch(0.985 0.001 106.423);
+    --color-dark-100: oklch(0.97 0.001 106.424);
+    --color-dark-200: oklch(0.923 0.003 48.717);
+    --color-dark-300: oklch(0.869 0.005 56.366);
+    --color-dark-400: oklch(0.709 0.01 56.259);
+    --color-stone-500: oklch(0.553 0.013 58.071);
+    --color-dark-600: oklch(0.1957 0 0); /* #151515 */
+    --color-dark-700: oklch(0.1957 0 0); /* #151515 */
+    --color-dark-800: oklch(0.2645 0 0); /* #252525 */
+    --color-dark-900: oklch(0.2562 0 0); /* #232323 */
+    --color-dark-950: oklch(0.1957 0 0); /* #151515 */
+}
+
+body {
+    @apply min-h-screen antialiased overflow-x-hidden selection:bg-amber-300 dark:bg-dark-950;
+}
