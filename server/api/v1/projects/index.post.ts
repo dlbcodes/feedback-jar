@@ -1,7 +1,3 @@
-import { prisma } from "~~/server/utils/prisma";
-import { requireAuthUser } from "~~/server/utils/auth";
-import { defineEventHandler, readBody, createError } from "h3";
-
 export default defineEventHandler(async (event) => {
 	const user = await requireAuthUser(event);
 	const body = await readBody(event);
@@ -10,14 +6,28 @@ export default defineEventHandler(async (event) => {
 		throw createError({ statusCode: 400, statusMessage: "Project name is required." });
 	}
 
-	const project = await prisma.project.create({
-		data: {
-			name: body.name,
-			timezone: body.timezone,
-			domain: body.domain,
-			profileId: user.id,
-		},
+	const defaultTypes = [
+		{ name: "bug", label: "Bug Report", emoji: "🐛", isDefault: true },
+		{ name: "feedback", label: "Feedback", emoji: "💡", isDefault: true },
+		{ name: "help", label: "Help Request", emoji: "❓", isDefault: true },
+	];
+
+	const projectWithTypes = await prisma.$transaction(async (prismaTx) => {
+		const project = await prismaTx.project.create({
+			data: {
+				name: body.name,
+				timezone: body.timezone,
+				domain: body.domain,
+				profileId: user.id,
+			},
+		});
+
+		await prismaTx.feedbackType.createMany({
+			data: defaultTypes.map(t => ({ ...t, projectId: project.id })),
+		});
+
+		return project;
 	});
 
-	return project;
+	return projectWithTypes;
 });

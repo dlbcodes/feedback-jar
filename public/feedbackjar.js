@@ -22,7 +22,7 @@
       width: 60px;
       height: 60px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #4f39f6 0%, #4f39f6 100%);
       border: none;
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
@@ -200,12 +200,12 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     .feedback-btn-primary {
-      background: #667eea;
+      background: #4f39f6;
       color: white;
       border: none;
     }
     .feedback-btn-primary:hover {
-      background: #5568d3;
+      background: #4338ca;
     }
     .feedback-btn-primary:disabled {
       background: #9ca3af;
