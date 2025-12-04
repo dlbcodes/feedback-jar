@@ -90,7 +90,7 @@ definePageMeta({
         </section>
 
         <section class="w-full max-w-4xl mx-auto text-left">
-            <div class="grid grid-cols-3 gap-6">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
                 <!-- Frictionless Reports -->
                 <div>
                     <img
@@ -101,7 +101,7 @@ definePageMeta({
                     <h5 class="text-xl font-mono font-bold tracking-tight mb-2">
                         Frictionless bug reports
                     </h5>
-                    <p class="font-mono text-stone-600">
+                    <p class="font-mono text-stone-600 text-sm md:text-base">
                         Users submit feedback without thinking — one click,
                         instant context, no forms.
                     </p>
@@ -117,7 +117,7 @@ definePageMeta({
                     <h5 class="text-xl font-mono font-bold tracking-tight mb-2">
                         Full context, automatically
                     </h5>
-                    <p class="font-mono text-stone-600">
+                    <p class="font-mono text-stone-600 text-sm md:text-base">
                         Page URL, browser, OS, viewport, device — everything
                         captured for every report.
                     </p>
@@ -133,7 +133,7 @@ definePageMeta({
                     <h5 class="text-xl font-mono font-bold tracking-tight mb-2">
                         Instant screenshots
                     </h5>
-                    <p class="font-mono text-stone-600">
+                    <p class="font-mono text-stone-600 text-sm md:text-base">
                         Users capture visual proof instantly, so you can fix the
                         exact issue they see.
                     </p>
@@ -149,7 +149,7 @@ definePageMeta({
                     <h5 class="text-xl font-mono font-bold tracking-tight mb-2">
                         Built for developers
                     </h5>
-                    <p class="font-mono text-stone-600">
+                    <p class="font-mono text-stone-600 text-sm md:text-base">
                         Copy–paste the snippet and forget it. No config, no SDK
                         heavy lifting.
                     </p>
@@ -165,7 +165,7 @@ definePageMeta({
                     <h5 class="text-xl font-mono font-bold tracking-tight mb-2">
                         Custom feedback types
                     </h5>
-                    <p class="font-mono text-stone-600">
+                    <p class="font-mono text-stone-600 text-sm md:text-base">
                         Bug, feature, UX issue — or create your own labels to
                         organize issues your way.
                     </p>
@@ -181,7 +181,7 @@ definePageMeta({
                     <h5 class="text-xl font-mono font-bold tracking-tight mb-2">
                         Up and running in minutes
                     </h5>
-                    <p class="font-mono text-stone-600">
+                    <p class="font-mono text-stone-600 text-sm md:text-base">
                         Add one script tag. Get feedback flowing. No dashboard
                         chaos, no complexity.
                     </p>

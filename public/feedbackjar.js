@@ -8,6 +8,7 @@
 
     const CONFIG = {
         apiEndpoint: currentScript?.getAttribute("data-api-endpoint") || "",
+        typesEndpoint: currentScript?.getAttribute("data-types-endpoint") || "",
         scriptKey: currentScript?.getAttribute("data-script-key") || "",
         position:
             currentScript?.getAttribute("data-position") || "bottom-right",
@@ -116,6 +117,12 @@
       display: grid;
       gap: 12px;
       margin-bottom: 20px;
+    }
+    .feedback-widget-loading {
+      text-align: center;
+      padding: 20px;
+      color: #6b7280;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
     .feedback-option-btn {
       padding: 16px;
@@ -254,6 +261,38 @@
       color: #6b7280;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
+    .feedback-error {
+      display: none;
+      text-align: center;
+      padding: 40px 24px;
+    }
+    .feedback-error.active {
+      display: block;
+    }
+    .feedback-error-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 16px;
+      background: #ef4444;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: white;
+    }
+    .feedback-error-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 8px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .feedback-error-message {
+      font-size: 14px;
+      color: #6b7280;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
   `;
 
     // Inject styles
@@ -275,19 +314,10 @@
           <button class="feedback-widget-close" id="feedbackClose">&times;</button>
         </div>
         <div class="feedback-widget-body">
-          <div class="feedback-widget-options" id="feedbackOptions">
-            <button class="feedback-option-btn" data-type="bug">
-              <div class="feedback-option-title">🐛 Report a Bug</div>
-              <p class="feedback-option-desc">Something isn't working as expected</p>
-            </button>
-            <button class="feedback-option-btn" data-type="feedback">
-              <div class="feedback-option-title">💡 Give Feedback</div>
-              <p class="feedback-option-desc">Share your thoughts and ideas</p>
-            </button>
-            <button class="feedback-option-btn" data-type="help">
-              <div class="feedback-option-title">❓ Ask for Help</div>
-              <p class="feedback-option-desc">Get assistance with something</p>
-            </button>
+          <div class="feedback-widget-loading" id="feedbackLoading">
+            Loading options...
+          </div>
+          <div class="feedback-widget-options" id="feedbackOptions" style="display: none;">
           </div>
           <div class="feedback-widget-form" id="feedbackForm">
             <div class="feedback-form-group">
@@ -312,6 +342,11 @@
             <div class="feedback-success-title">Thank you!</div>
             <div class="feedback-success-message">We've received your message and will get back to you soon.</div>
           </div>
+          <div class="feedback-error" id="feedbackError">
+            <div class="feedback-error-icon">⚠</div>
+            <div class="feedback-error-title">Oops!</div>
+            <div class="feedback-error-message">Failed to load feedback options. Please try again later.</div>
+          </div>
         </div>
       </div>
     </div>
@@ -326,9 +361,11 @@
     const btn = document.getElementById("feedbackWidgetBtn");
     const modal = document.getElementById("feedbackModal");
     const closeBtn = document.getElementById("feedbackClose");
+    const loading = document.getElementById("feedbackLoading");
     const options = document.getElementById("feedbackOptions");
     const form = document.getElementById("feedbackForm");
     const success = document.getElementById("feedbackSuccess");
+    const error = document.getElementById("feedbackError");
     const backBtn = document.getElementById("feedbackBack");
     const submitBtn = document.getElementById("feedbackSubmit");
     const emailInput = document.getElementById("feedbackEmail");
@@ -336,6 +373,8 @@
     const title = document.getElementById("feedbackTitle");
 
     let selectedType = null;
+    let feedbackTypes = [];
+    let typesLoaded = false;
 
     // Utility functions
     function getBrowserInfo() {
@@ -386,8 +425,6 @@
     }
 
     async function captureScreenshot() {
-        // This is a placeholder - actual screenshot would require a library like html2canvas
-        // For now, we'll return null
         return null;
     }
 
@@ -415,9 +452,77 @@
         }
     }
 
+    // Load feedback types
+    async function loadFeedbackTypes() {
+        try {
+            const url = `${CONFIG.typesEndpoint}?script_key=${CONFIG.scriptKey}`;
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                throw new Error("Failed to load feedback types");
+            }
+
+            const data = await response.json();
+            feedbackTypes = data.types || [];
+
+            // Render options
+            renderFeedbackOptions();
+
+            loading.style.display = "none";
+            options.style.display = "grid";
+            typesLoaded = true;
+        } catch (err) {
+            console.error("Error loading feedback types:", err);
+            loading.style.display = "none";
+            error.classList.add("active");
+        }
+    }
+
+    // Render feedback options dynamically
+    function renderFeedbackOptions() {
+        options.innerHTML = "";
+
+        feedbackTypes.forEach((type) => {
+            const btn = document.createElement("button");
+            btn.className = "feedback-option-btn";
+            btn.dataset.type = type.name;
+
+            const emoji = type.emoji || getDefaultEmoji(type.name);
+
+            btn.innerHTML = `
+                <div class="feedback-option-title">${emoji} ${type.label}</div>
+            `;
+
+            btn.addEventListener("click", () => {
+                selectedType = type.name;
+                title.textContent = type.label;
+                options.style.display = "none";
+                form.classList.add("active");
+            });
+
+            options.appendChild(btn);
+        });
+    }
+
+    // Get default emoji for common types
+    function getDefaultEmoji(typeName) {
+        const emojiMap = {
+            bug: "🐛",
+            feedback: "💡",
+            help: "❓",
+            feature: "✨",
+            improvement: "🚀",
+            question: "❓",
+        };
+        return emojiMap[typeName.toLowerCase()] || "💬";
+    }
+
     // Event handlers
     btn.addEventListener("click", () => {
         modal.classList.add("active");
+        if (!typesLoaded) {
+            loadFeedbackTypes();
+        }
     });
 
     closeBtn.addEventListener("click", closeModal);
@@ -431,34 +536,21 @@
     }
 
     function resetWidget() {
-        options.style.display = "grid";
+        if (typesLoaded) {
+            loading.style.display = "none";
+            options.style.display = "grid";
+        } else {
+            loading.style.display = "block";
+            options.style.display = "none";
+        }
         form.classList.remove("active");
         success.classList.remove("active");
+        error.classList.remove("active");
         title.textContent = "How can we help?";
         emailInput.value = "";
         messageInput.value = "";
         selectedType = null;
-        document.querySelectorAll(".feedback-option-btn").forEach((btn) => {
-            btn.classList.remove("selected");
-        });
     }
-
-    // Option selection
-    document.querySelectorAll(".feedback-option-btn").forEach((optionBtn) => {
-        optionBtn.addEventListener("click", () => {
-            selectedType = optionBtn.dataset.type;
-
-            const titles = {
-                bug: "Report a Bug",
-                feedback: "Give Feedback",
-                help: "Ask for Help",
-            };
-
-            title.textContent = titles[selectedType];
-            options.style.display = "none";
-            form.classList.add("active");
-        });
-    });
 
     backBtn.addEventListener("click", () => {
         form.classList.remove("active");
@@ -499,7 +591,7 @@
                 device_pixel_ratio: window.devicePixelRatio,
                 user_agent: navigator.userAgent,
                 session_id: generateSessionId(),
-                user_id: null, // You can set this if you have user tracking
+                user_id: null,
                 metadata: {
                     country: location.country,
                     region: location.region,

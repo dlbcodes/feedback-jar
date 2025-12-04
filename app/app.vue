@@ -11,7 +11,13 @@ const apiEndpoint = isProd
     ? "https://www.datomi.app/api/v1/feedback"
     : "http://localhost:3000/api/v1/feedback";
 
-const scriptKey = "cmihoylrp0003l104naaczfsw";
+const apiTypesEndpoint = isProd
+    ? "https://www.datomi.app/api/v1/feedback/types"
+    : "http://localhost:3000/api/v1/feedback/types";
+
+const scriptKey = isProd
+    ? "cmihoylrp0003l104naaczfsw"
+    : "cmih915qu00050z84sdjhg3ly";
 const position = "top-right";
 
 useHead({
@@ -21,6 +27,7 @@ useHead({
             defer: true,
             "data-api-endpoint": apiEndpoint,
             "data-script-key": scriptKey,
+            "data-types-endpoint": apiTypesEndpoint,
             "data-position": position,
         },
     ],

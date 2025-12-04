@@ -18,7 +18,7 @@ const toggleMobile = () => (showMobileMenu.value = !showMobileMenu.value);
                 <!-- Announcement bar  -->
                 <div class="flex justify-center pb-2 pt-1 px-3">
                     <p
-                        class="text-xs font-mono text-stone-950 dark:text-dark-100"
+                        class="text-xs font-mono text-stone-950 whitespace-nowrap dark:text-dark-100"
                     >
                         👉 We’re in private beta 👀.
                         <NuxtLink
