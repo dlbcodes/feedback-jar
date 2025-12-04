@@ -44,6 +44,7 @@ export default defineEventHandler(async (event) => {
 				theme: rm.theme,
 				matchType: rm.matchType,
 				priority: rm.priority,
+				dismissable: rm.dismissable
 			}))
 		};
 	}

@@ -279,7 +279,6 @@
     /* Shared Header/Body styles for route messages */
     .feedback-popover-header {
       padding: 16px;
-      border-bottom: 1px solid #e5e7eb;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
@@ -565,12 +564,8 @@
             <div class="feedback-route-popover" style="${themeStyles}">
               <div class="feedback-popover-header">
                 <div style="display: flex; align-items: center; flex: 1;">
-                  <span class="feedback-popover-icon">${
-                      message.emoji || "💬"
-                  }</span>
-                  <h3 class="feedback-popover-title">${escapeHtml(
-                      message.title || "Quick tip"
-                  )}</h3>
+               
+                 
                 </div>
                 ${
                     message.dismissable
