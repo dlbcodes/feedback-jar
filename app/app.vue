@@ -15,6 +15,10 @@ const apiTypesEndpoint = isProd
     ? "https://www.datomi.app/api/v1/feedback/types"
     : "http://localhost:3000/api/v1/feedback/types";
 
+const apiMessagesEndpoint = isProd
+    ? "https://www.datomi.app/api/v1/feedback/messages"
+    : "http://localhost:3000/api/v1/feedback/messages";
+
 const scriptKey = isProd
     ? "cmihoylrp0003l104naaczfsw"
     : "cmih915qu00050z84sdjhg3ly";
@@ -28,6 +32,7 @@ useHead({
             "data-api-endpoint": apiEndpoint,
             "data-script-key": scriptKey,
             "data-types-endpoint": apiTypesEndpoint,
+            "data-route-messages-endpoint": apiMessagesEndpoint,
             "data-position": position,
         },
     ],

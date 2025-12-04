@@ -16,8 +16,8 @@ const navigationItems = computed(() => [
         icon: BinocularsIcon,
     },
     {
-        href: `/admin/${projectId.value}/events`,
-        label: "Events",
+        href: `/admin/${projectId.value}/messages`,
+        label: "Messages",
         icon: CursorIcon,
     },
     {

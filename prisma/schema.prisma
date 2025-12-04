@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -30,7 +27,7 @@ model Profile {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 
-   projects            Project[]
+  projects            Project[]
   assignedFeedbacks   Feedback[]        @relation("AssignedFeedback")
   feedbackComments    FeedbackComment[]
 
@@ -47,6 +44,7 @@ model Project {
   profile       Profile    @relation(fields: [profileId], references: [id], onDelete: Cascade)
   feedbacks     Feedback[]
   feedbackTypes FeedbackType[]
+  routeMessages RouteMessage[]
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
 
@@ -67,6 +65,56 @@ model FeedbackType {
 
   @@unique([projectId, name])
   @@index([projectId])
+}
+
+
+model RouteMessage {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  route       String   // e.g., "/admin", "/pricing", "/dashboard"
+  
+  // Enhanced message fields
+  message     String   @db.Text // Plain text fallback
+  messageHtml String?  @db.Text // Rich HTML content
+  messageType String   @default("text") // "text", "html", "builder"
+  
+  // Visual builder data (JSON structure for drag-drop builder)
+  builderData Json?    // Store blocks, styles, layout config
+  
+  // Display options
+  displayType String   @default("popover") // "popover", "banner", "modal", "toast"
+  theme       Json?    // Custom colors, fonts, spacing
+  
+  // Behavior settings
+  isActive    Boolean  @default(true)
+  matchType   String   @default("exact") // "exact", "startsWith", "contains", "regex"
+  priority    Int      @default(0) // Higher priority shows first
+  
+  // Targeting & scheduling
+  showOnce    Boolean  @default(false) // Show only once per user
+  dismissable Boolean  @default(true)  // Can user dismiss it?
+  autoHide    Int?     // Auto-hide after X seconds
+  startDate   DateTime? // Schedule: show from
+  endDate     DateTime? // Schedule: show until
+  
+  // CTAs and actions
+  ctaText     String?  // Button text
+  ctaUrl      String?  // Button link
+  ctaAction   String?  // "open_widget", "external_link", "dismiss"
+  
+  // Analytics
+  views       Int      @default(0)
+  clicks      Int      @default(0)
+  dismissals  Int      @default(0)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([projectId, route])
+  @@index([projectId])
+  @@index([isActive])
+  @@index([priority])
 }
 
 model Feedback {
@@ -102,7 +150,7 @@ model Feedback {
   
   // Status & assignment
   status             String       @default("new") // "new", "in_progress", "resolved", "closed"
-  assignedToId String? @db.Uuid
+  assignedToId       String?      @db.Uuid
   assignedTo         Profile?     @relation("AssignedFeedback", fields: [assignedToId], references: [id], onDelete: SetNull)
   
   // Comments
@@ -122,7 +170,7 @@ model FeedbackComment {
   id         String   @id @default(cuid())
   feedbackId String
   feedback   Feedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
- authorId String @db.Uuid
+  authorId   String   @db.Uuid
   author     Profile  @relation(fields: [authorId], references: [id], onDelete: Cascade)
   content    String   @db.Text
   isInternal Boolean  @default(true) // Internal notes vs customer-facing
@@ -132,7 +180,6 @@ model FeedbackComment {
   @@index([feedbackId])
   @@index([authorId])
 }
-
 
 model Waitlist {
   id        String   @id @default(uuid()) @db.Uuid

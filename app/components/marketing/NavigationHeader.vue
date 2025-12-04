@@ -111,7 +111,7 @@ const toggleMobile = () => (showMobileMenu.value = !showMobileMenu.value);
                         />
                     </button>
                 </div>
-                <MobileNavigation :show="showMobileMenu" />
+                <!-- <MobileNavigation :show="showMobileMenu" /> -->
 
                 <!-- End Buttons -->
             </div>
