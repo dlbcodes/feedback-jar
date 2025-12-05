@@ -45,5 +45,8 @@ import OledDisplayIcon from '~/assets/images/icons/oled-display.png'
 import PixelDisplayIcon from '~/assets/images/icons/pixeldisplay.png'
 import BugIcon from '~/assets/images/icons/bug.png'
 import FeedbackIcon from '~/assets/images/icons/feedback.png'
+import MessageIcon from '~/assets/images/icons/message.png'
+import ColorPaletteIcon from '~/assets/images/icons/color-palette.png'
+import VintageLetterIcon from '~/assets/images/icons/vintage-letter.png'
 
-export { AstronautIcon, BrowserIcon, CodeIcon, CogIcon, CursorIcon, EggIcon, EyeIcon, PackageIcon, QuestionMarkIcon, QuestionIcon, ScriptIcon, VintageComputerIcon, KeyboardIcon, TodoListIcon, LifebuoyIcon, BinocularsIcon, ZapIcon, BarChartIcon, GraphIcon, ZeroIcon, FourIcon, SadRabbitIcon, SpaceCatIcon, WallClockIcon, PlagueMaskIcon, GlobeIcon, SproutIcon, StarIcon, RocketIcon, ExperimentTubeIcon, AlertIcon, PriceTagIcon, RobotIcon, FunnelChartIcon, FunnelIcon, DashboardIcon, PlugAdapaterIcon, CreditCardIcon, WindIcon, SirenIcon, FlameIcon, FireworksShowIcon, LinkIcon, OledDisplayIcon, PixelDisplayIcon, BugIcon, FeedbackIcon }
+export { AstronautIcon, BrowserIcon, CodeIcon, CogIcon, CursorIcon, EggIcon, EyeIcon, PackageIcon, QuestionMarkIcon, QuestionIcon, ScriptIcon, VintageComputerIcon, KeyboardIcon, TodoListIcon, LifebuoyIcon, BinocularsIcon, ZapIcon, BarChartIcon, GraphIcon, ZeroIcon, FourIcon, SadRabbitIcon, SpaceCatIcon, WallClockIcon, PlagueMaskIcon, GlobeIcon, SproutIcon, StarIcon, RocketIcon, ExperimentTubeIcon, AlertIcon, PriceTagIcon, RobotIcon, FunnelChartIcon, FunnelIcon, DashboardIcon, PlugAdapaterIcon, CreditCardIcon, WindIcon, SirenIcon, FlameIcon, FireworksShowIcon, LinkIcon, OledDisplayIcon, PixelDisplayIcon, BugIcon, FeedbackIcon, MessageIcon, ColorPaletteIcon, VintageLetterIcon }

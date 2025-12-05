@@ -2,6 +2,8 @@
 const route = useRoute();
 const projectId = route.params.id as string;
 
+const messageBuilderRef = ref();
+
 const loading = ref(true);
 const error = ref<string | null>(null);
 const messages = ref<any[]>([]);
@@ -85,66 +87,78 @@ async function createMessage() {
 }
 
 onMounted(fetchMessages);
+
+const matchTypeItems = [
+    {
+        label: "Exact",
+        value: "exact",
+    },
+    {
+        label: "Starts with",
+        value: "startsWith",
+    },
+    {
+        label: "Contains",
+        value: "contains",
+    },
+];
 </script>
 
 <template>
-    <div class="p-6 max-w-3xl mx-auto">
+    <div class="p-6 max-w-4xl mx-auto">
         <h1 class="text-2xl font-semibold mb-6">Route Messages</h1>
 
         <div v-if="loading" class="text-gray-500">Loading messages...</div>
 
         <div v-if="error" class="text-red-500 mb-4">{{ error }}</div>
 
-        <div class="border rounded-xl p-4 mb-8 bg-white shadow-sm">
+        <div class="rounded-xl p-4 mb-8 bg-white">
             <h2 class="font-medium text-lg mb-4">Add Message</h2>
 
-            <form @submit.prevent="createMessage" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium">Route</label>
-                    <input
-                        v-model="form.route"
-                        placeholder="/pricing"
-                        class="w-full px-3 py-2 border rounded-lg"
-                        required
-                    />
-                </div>
+            <div @submit.prevent="createMessage" class="space-y-4">
+                <Field
+                    id="route"
+                    class="flex-1"
+                    label="Route"
+                    placeholder="/pricing"
+                    type="text"
+                    :error="errors?.route"
+                >
+                    <Input v-model="form.route" />
+                </Field>
 
                 <!-- Use your message builder here -->
                 <MessageBuilder v-model="form.messageData" />
 
-                <div>
-                    <label class="block text-sm font-medium">Match Type</label>
-                    <select
+                <Field
+                    id="match-type"
+                    class="flex-1"
+                    label="Match type"
+                    :error="errors?.matchType"
+                >
+                    <Listbox
+                        :options="matchTypeItems"
                         v-model="form.matchType"
-                        class="w-full px-3 py-2 border rounded-lg"
-                    >
-                        <option value="exact">Exact</option>
-                        <option value="startsWith">Starts With</option>
-                        <option value="contains">Contains</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium">Priority</label>
-                    <input
-                        type="number"
-                        v-model.number="form.priority"
-                        class="w-full px-3 py-2 border rounded-lg"
                     />
-                </div>
+                </Field>
+
+                <Field
+                    id="priority"
+                    class="flex-1"
+                    label="Match type"
+                    type="number"
+                    :error="errors?.priority"
+                >
+                    <Input v-model="form.priority" />
+                </Field>
 
                 <div class="flex items-center gap-2">
                     <input type="checkbox" v-model="form.isActive" />
                     <label>Active</label>
                 </div>
 
-                <button
-                    type="submit"
-                    class="px-4 py-2 rounded-lg bg-black text-white hover:bg-gray-800 transition"
-                >
-                    Add Message
-                </button>
-            </form>
+                <Button @click="createMessage"> Add message </Button>
+            </div>
         </div>
 
         <div>

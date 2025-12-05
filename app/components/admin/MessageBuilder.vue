@@ -9,6 +9,16 @@ import {
     LinkIcon,
     SwatchIcon,
 } from "@heroicons/vue/24/outline";
+import {
+    CodeIcon,
+    VintageLetterIcon,
+    DashboardIcon,
+    ColorPaletteIcon,
+} from "~/assets/images/icons";
+import {
+    selectorGroupVariants,
+    selectorVariants,
+} from "~/variants/ButtonGroupVariants";
 
 const props = defineProps({
     modelValue: {
@@ -136,67 +146,102 @@ watch(
     updateModel,
     { deep: true }
 );
+
+const displayTypeItems = [
+    {
+        label: "Popover",
+        value: "popover",
+    },
+    {
+        label: "Banner",
+        value: "banner",
+    },
+    {
+        label: "Toast",
+        value: "toast",
+    },
+    {
+        label: "Modal",
+        value: "modal",
+    },
+];
 </script>
 
 <template>
-    <div class="max-w-6xl mx-auto p-6">
+    <div class="">
         <div class="mb-6">
-            <h1 class="text-2xl font-bold mb-4">Message Builder</h1>
+            <h1 class="text-lg font-medium mb-4">Message Builder</h1>
 
             <!-- Message Type Selector -->
-            <div class="flex gap-2 mb-4">
+            <div
+                :class="
+                    cn(selectorGroupVariants({ orientation: 'horizontal' }))
+                "
+            >
                 <button
                     @click="messageType = 'text'"
-                    :class="[
-                        'px-4 py-2 rounded-lg',
-                        messageType === 'text'
-                            ? 'bg-indigo-600 text-white'
-                            : 'bg-gray-100',
-                    ]"
+                    :class="
+                        cn(
+                            selectorVariants({
+                                selected: messageType === 'text',
+                            })
+                        )
+                    "
                 >
+                    <img
+                        :src="VintageLetterIcon"
+                        alt="Vintage letter icon"
+                        class="size-6 inline"
+                    />
                     Plain Text
                 </button>
                 <button
                     @click="messageType = 'html'"
-                    :class="[
-                        'px-4 py-2 rounded-lg',
-                        messageType === 'html'
-                            ? 'bg-indigo-600 text-white'
-                            : 'bg-gray-100',
-                    ]"
+                    :class="
+                        cn(
+                            selectorVariants({
+                                selected: messageType === 'html',
+                            })
+                        )
+                    "
                 >
-                    <CodeBracketIcon class="w-4 h-4 inline mr-2" />
+                    <img
+                        :src="CodeIcon"
+                        alt="Code icon"
+                        class="size-6 inline"
+                    />
+
                     HTML
                 </button>
                 <button
                     @click="messageType = 'builder'"
-                    :class="[
-                        'px-4 py-2 rounded-lg',
-                        messageType === 'builder'
-                            ? 'bg-indigo-600 text-white'
-                            : 'bg-gray-100',
-                    ]"
+                    :class="
+                        cn(
+                            selectorVariants({
+                                selected: messageType === 'builder',
+                            })
+                        )
+                    "
                 >
-                    <Squares2X2Icon class="w-4 h-4 inline mr-2" />
+                    <img
+                        :src="DashboardIcon"
+                        alt="Vintage letter icon"
+                        class="size-6 inline"
+                    />
+
                     Visual Builder
                 </button>
             </div>
 
             <!-- Display Type -->
-            <div class="mb-4">
-                <label class="block text-sm font-medium mb-2"
-                    >Display Type</label
-                >
-                <select
-                    v-model="displayType"
-                    class="w-full px-3 py-2 border rounded-lg"
-                >
-                    <option value="popover">Popover</option>
-                    <option value="banner">Banner</option>
-                    <option value="toast">Toast</option>
-                    <option value="modal">Modal</option>
-                </select>
-            </div>
+            <Field
+                id="match-type"
+                class="flex-1"
+                label="Match type"
+                :error="errors?.matchType"
+            >
+                <Listbox :options="displayTypeItems" v-model="displayType" />
+            </Field>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -322,7 +367,11 @@ watch(
                     <h3
                         class="text-sm font-medium mb-3 flex items-center gap-2"
                     >
-                        <SwatchIcon class="w-4 h-4" />
+                        <img
+                            :src="ColorPaletteIcon"
+                            alt="Color palette icon"
+                            class="size-6 shrink-0"
+                        />
                         Theme
                     </h3>
                     <div class="grid grid-cols-3 gap-3">

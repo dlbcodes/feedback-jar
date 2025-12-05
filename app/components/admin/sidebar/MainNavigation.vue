@@ -3,7 +3,7 @@ import {
     BinocularsIcon,
     AstronautIcon,
     CogIcon,
-    CursorIcon,
+    MessageIcon,
 } from "~/assets/images/icons";
 
 const route = useRoute();
@@ -18,7 +18,7 @@ const navigationItems = computed(() => [
     {
         href: `/admin/${projectId.value}/messages`,
         label: "Messages",
-        icon: CursorIcon,
+        icon: MessageIcon,
     },
     {
         href: `/admin/${projectId.value}/users`,
