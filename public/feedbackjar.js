@@ -563,10 +563,7 @@
                 html = `
             <div class="feedback-route-popover" style="${themeStyles}">
               <div class="feedback-popover-header">
-                <div style="display: flex; align-items: center; flex: 1;">
                
-                 
-                </div>
                 ${
                     message.dismissable
                         ? '<button class="feedback-popover-close" data-dismiss>&times;</button>'

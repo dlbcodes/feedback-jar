@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { ChevronLeftIcon, BookmarkIcon } from "@heroicons/vue/24/outline";
+
 const route = useRoute();
 const projectId = route.params.id as string;
 
-const messageBuilderRef = ref();
+const projectsStore = useProjectsStore();
 
 const loading = ref(true);
 const error = ref<string | null>(null);
@@ -102,63 +104,125 @@ const matchTypeItems = [
         value: "contains",
     },
 ];
+
+const showCreateMessageModal = ref(false);
 </script>
 
 <template>
-    <div class="p-6 max-w-4xl mx-auto">
-        <h1 class="text-2xl font-semibold mb-6">Route Messages</h1>
+    <div class="p-6 w-full mx-auto">
+        <AdminHeader title="Route Messages" :show-refresh="false" />
+        <!-- <Button @click="showCreateMessageModal = true">Show modal</Button> -->
 
         <div v-if="loading" class="text-gray-500">Loading messages...</div>
 
         <div v-if="error" class="text-red-500 mb-4">{{ error }}</div>
 
-        <div class="rounded-xl p-4 mb-8 bg-white">
-            <h2 class="font-medium text-lg mb-4">Add Message</h2>
+        <div class="grid grid-cols-2 gap-x-8">
+            <!-- Builder -->
+            <div class="rounded-xl p-4 mb-8 bg-white">
+                <h2 class="font-medium text-lg mb-4">Add Message</h2>
 
-            <div @submit.prevent="createMessage" class="space-y-4">
-                <Field
-                    id="route"
-                    class="flex-1"
-                    label="Route"
-                    placeholder="/pricing"
-                    type="text"
-                    :error="errors?.route"
-                >
-                    <Input v-model="form.route" />
-                </Field>
+                <div @submit.prevent="createMessage" class="space-y-4">
+                    <Field
+                        id="route"
+                        class="flex-1"
+                        label="Route"
+                        placeholder="/pricing"
+                        type="text"
+                        :error="errors?.route"
+                    >
+                        <Input v-model="form.route" />
+                    </Field>
 
-                <!-- Use your message builder here -->
-                <MessageBuilder v-model="form.messageData" />
+                    <!-- Use your message builder here -->
+                    <MessageBuilder v-model="form.messageData" />
 
-                <Field
-                    id="match-type"
-                    class="flex-1"
-                    label="Match type"
-                    :error="errors?.matchType"
-                >
-                    <Listbox
-                        :options="matchTypeItems"
-                        v-model="form.matchType"
-                    />
-                </Field>
+                    <Field
+                        id="match-type"
+                        class="flex-1"
+                        label="Match type"
+                        :error="errors?.matchType"
+                    >
+                        <Listbox
+                            :options="matchTypeItems"
+                            v-model="form.matchType"
+                        />
+                    </Field>
 
-                <Field
-                    id="priority"
-                    class="flex-1"
-                    label="Match type"
-                    type="number"
-                    :error="errors?.priority"
-                >
-                    <Input v-model="form.priority" />
-                </Field>
+                    <Field
+                        id="priority"
+                        class="flex-1"
+                        label="Match type"
+                        type="number"
+                        :error="errors?.priority"
+                    >
+                        <Input v-model="form.priority" />
+                    </Field>
 
-                <div class="flex items-center gap-2">
-                    <input type="checkbox" v-model="form.isActive" />
-                    <label>Active</label>
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" v-model="form.isActive" />
+                        <label>Active</label>
+                    </div>
+
+                    <Button @click="createMessage"> Add message </Button>
                 </div>
-
-                <Button @click="createMessage"> Add message </Button>
             </div>
+            <!-- End Builder -->
+
+            <!-- Preview -->
+
+            <div
+                class="w-full rounded-2xl overflow-hidden border border-stone-100 p-1 bg-stone-100"
+            >
+                <!-- Browser header -->
+                <div class="w-full flex flex-col gap-x-1 bg-stone-100">
+                    <div class="flex gap-x-1 px-4 py-2">
+                        <span
+                            class="size-3 shrink-0 rounded-full bg-[#ff5f58]"
+                        ></span>
+                        <span
+                            class="size-3 shrink-0 rounded-full bg-[#febc2e]"
+                        ></span>
+                        <span
+                            class="size-3 shrink-0 rounded-full bg-[#29c83f]"
+                        ></span>
+                    </div>
+                    <div class="flex items-center gap-x-8 pl-4 py-2">
+                        <div class="flex gap-x-2">
+                            <ChevronLeftIcon
+                                class="size-5 shrink-0 text-stone-600"
+                            />
+                            <ChevronLeftIcon
+                                class="size-5 shrink-0 rotate-180 text-stone-600"
+                            />
+                        </div>
+                        <div class="flex flex-1 items-center gap-x-1">
+                            <BookmarkIcon
+                                class="size-5 shrink-0 text-stone-600"
+                            />
+                            <div
+                                class="flex flex-1 text-base bg-white px-2 py-1 rounded-lg"
+                            >
+                                <span class="text-stone-500">{{
+                                    projectsStore.currentProject?.domain ||
+                                    "https://example.com"
+                                }}</span>
+                                {{ form.route }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Browser header -->
+
+                <div
+                    class="relative w-full bg-white shadow-xs h-[400px] rounded-xl"
+                >
+                    <div
+                        class="absolute bottom-2 right-2 size-12 shadow rounded-full bg-indigo-600"
+                    ></div>
+                </div>
+            </div>
+            <!-- End Preview -->
         </div>
 
         <div>
@@ -199,4 +263,6 @@ const matchTypeItems = [
             </div>
         </div>
     </div>
+
+    <CreateMessageModal v-model="showCreateMessageModal" />
 </template>

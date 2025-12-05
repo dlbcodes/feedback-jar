@@ -244,23 +244,23 @@ const displayTypeItems = [
             </Field>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
             <!-- Editor -->
-            <div class="bg-white rounded-xl border p-6">
+            <div class="">
                 <h2 class="text-lg font-semibold mb-4">Edit Message</h2>
 
-                <textarea
+                <Textarea
                     v-if="messageType === 'text'"
                     v-model="message"
                     placeholder="Enter your plain text message..."
-                    class="w-full h-64 px-3 py-2 border rounded-lg font-mono text-sm"
+                    class="h-64"
                 />
 
-                <textarea
+                <Textarea
                     v-else-if="messageType === 'html'"
                     v-model="messageHtml"
                     placeholder="<h2>Your HTML here</h2><p>Supports full HTML</p>"
-                    class="w-full h-64 px-3 py-2 border rounded-lg font-mono text-sm"
+                    class="h-64"
                 />
 
                 <div v-else>
@@ -363,7 +363,7 @@ const displayTypeItems = [
                 </div>
 
                 <!-- Theme Customization -->
-                <div class="mt-6 pt-6 border-t">
+                <div class="mt-6 pt-6">
                     <h3
                         class="text-sm font-medium mb-3 flex items-center gap-2"
                     >
@@ -375,36 +375,41 @@ const displayTypeItems = [
                         Theme
                     </h3>
                     <div class="grid grid-cols-3 gap-3">
-                        <div>
-                            <label class="block text-xs mb-1">Background</label>
-                            <input
-                                type="color"
-                                v-model="theme.backgroundColor"
-                                class="w-full h-8 rounded border cursor-pointer"
-                            />
-                        </div>
-                        <div>
-                            <label class="block text-xs mb-1">Text</label>
-                            <input
-                                type="color"
-                                v-model="theme.textColor"
-                                class="w-full h-8 rounded border cursor-pointer"
-                            />
-                        </div>
-                        <div>
-                            <label class="block text-xs mb-1">CTA</label>
-                            <input
-                                type="color"
-                                v-model="theme.ctaColor"
-                                class="w-full h-8 rounded border cursor-pointer"
-                            />
-                        </div>
+                        <Field
+                            id="background-color"
+                            label="Background"
+                            :error="errors?.backgroundColor"
+                        >
+                            <ColorPicker v-model="theme.backgroundColor">
+                                <IconPalette />
+                            </ColorPicker>
+                        </Field>
+
+                        <Field
+                            id="text-color"
+                            label="Text"
+                            :error="errors?.textColor"
+                        >
+                            <ColorPicker v-model="theme.textColor">
+                                <IconPalette />
+                            </ColorPicker>
+                        </Field>
+
+                        <Field
+                            id="cta-color"
+                            label="CTA"
+                            :error="errors?.ctaColor"
+                        >
+                            <ColorPicker v-model="theme.ctaColor">
+                                <IconPalette />
+                            </ColorPicker>
+                        </Field>
                     </div>
                 </div>
             </div>
 
             <!-- Preview -->
-            <div class="bg-gray-50 rounded-xl border p-6">
+            <div class="bg-gray-50 rounded-xl border p-6 hidden">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-lg font-semibold">Preview</h2>
                     <button

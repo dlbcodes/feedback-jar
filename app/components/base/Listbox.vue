@@ -120,7 +120,7 @@ onMounted(() => {
                                     variant: 'primary',
                                     size: 'full',
                                 }),
-                                'absolute w-full z-50 mt-0.5'
+                                'absolute w-full z-50 mt-0.5 py-2'
                             )
                         "
                     >
@@ -152,15 +152,15 @@ onMounted(() => {
                             <li
                                 :class="[
                                     active
-                                        ? 'bg-blue-100 dark:bg-dark-700'
+                                        ? 'bg-indigo-100 dark:bg-dark-700'
                                         : '',
-                                    'cursor-pointer select-none relative py-2 pl-3 pr-9',
+                                    'cursor-pointer rounded-lg select-none relative py-2 pl-3 pr-9',
                                 ]"
                             >
                                 <span
                                     :class="[
                                         isSelected
-                                            ? 'font-semibold'
+                                            ? 'font-medium'
                                             : 'font-normal',
                                         'block truncate',
                                     ]"
@@ -170,7 +170,7 @@ onMounted(() => {
 
                                 <span
                                     v-if="isSelected"
-                                    class="absolute inset-y-0 right-0 flex items-center pr-3 text-blue-600"
+                                    class="absolute inset-y-0 right-0 flex items-center pr-3 text-indigo-600"
                                 >
                                     <CheckIcon
                                         class="h-5 w-5"
